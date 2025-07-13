@@ -141,6 +141,9 @@ pub struct Verb {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ComExtension {
+    #[serde(rename = "@Category")]
+    pub category: String,
+
     #[serde(rename = "com:ComServer")]
     pub com_server: Option<ComServer>,
 }
@@ -170,15 +173,12 @@ pub struct ComClass {
 }
 #[cfg(test)]
 mod test {
-    use std::io::read_to_string;
-
     use serde_xml_rs::from_str;
-
     use crate::Package;
 
     #[test]
     fn test_xml() {
-        for (i) in std::fs::read_dir("assets/xml").unwrap() {
+        for i in std::fs::read_dir("assets/xml").unwrap() {
             let xml = std::fs::read_to_string(i.unwrap().path()).unwrap();
             let package = from_str::<Package>(&xml).unwrap();
             assert!(!package.identity.name.is_empty());
